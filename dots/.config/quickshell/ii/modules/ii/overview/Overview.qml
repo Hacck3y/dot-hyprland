@@ -168,14 +168,17 @@ Scope {
         target: "search"
 
         function toggle() {
+            // Opens full overview (search + workspaces)
             overviewScope.showOverviewWidget = true;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
         function workspacesToggle() {
+            // Alias for toggle() - opens full overview (search + workspaces)
             overviewScope.showOverviewWidget = true;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
         function searchOnlyToggle() {
+            // Opens search-only mode (no workspaces overview)
             overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
@@ -183,10 +186,12 @@ Scope {
             GlobalStates.overviewOpen = false;
         }
         function open() {
+            // Opens full overview (search + workspaces)
             overviewScope.showOverviewWidget = true;
             GlobalStates.overviewOpen = true;
         }
         function openSearchOnly() {
+            // Opens search-only mode (no workspaces overview)
             overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = true;
         }
