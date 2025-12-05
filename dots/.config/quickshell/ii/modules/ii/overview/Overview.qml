@@ -14,6 +14,7 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    property bool showOverviewWidget: true
     Variants {
         id: overviewVariants
         model: Quickshell.screens
@@ -119,7 +120,7 @@ Scope {
                 Loader {
                     id: overviewLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
+                    active: GlobalStates.overviewOpen && overviewScope.showOverviewWidget && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
@@ -138,6 +139,7 @@ Scope {
             let panelWindow = overviewVariants.instances[i];
             if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                 overviewScope.dontAutoCancelSearch = true;
+                overviewScope.showOverviewWidget = false;
                 panelWindow.setSearchingText(Config.options.search.prefix.clipboard);
                 GlobalStates.overviewOpen = true;
                 return;
@@ -154,6 +156,7 @@ Scope {
             let panelWindow = overviewVariants.instances[i];
             if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                 overviewScope.dontAutoCancelSearch = true;
+                overviewScope.showOverviewWidget = false;
                 panelWindow.setSearchingText(Config.options.search.prefix.emojis);
                 GlobalStates.overviewOpen = true;
                 return;
@@ -165,15 +168,26 @@ Scope {
         target: "search"
 
         function toggle() {
+            overviewScope.showOverviewWidget = true;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
         function workspacesToggle() {
+            overviewScope.showOverviewWidget = true;
+            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+        }
+        function searchOnlyToggle() {
+            overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
         function close() {
             GlobalStates.overviewOpen = false;
         }
         function open() {
+            overviewScope.showOverviewWidget = true;
+            GlobalStates.overviewOpen = true;
+        }
+        function openSearchOnly() {
+            overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = true;
         }
         function toggleReleaseInterrupt() {
@@ -189,6 +203,7 @@ Scope {
         description: "Toggles search on press"
 
         onPressed: {
+            overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
     }
@@ -197,6 +212,7 @@ Scope {
         description: "Toggles overview on press"
 
         onPressed: {
+            overviewScope.showOverviewWidget = true;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
     }
@@ -213,6 +229,7 @@ Scope {
                 GlobalStates.superReleaseMightTrigger = true;
                 return;
             }
+            overviewScope.showOverviewWidget = false;
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
     }
